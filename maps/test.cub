@@ -1,7 +1,7 @@
 
-F 1,100,0
-C 225,30,0
-NO ./texters/north.xpm
+F   1,100,0
+C  200,30,0
+NO  ./texters/north.xpm
 SO ./texters/south.xpm
 WE ./texters/west.xpm
 EA ./texters/east.xpm

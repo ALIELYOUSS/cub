@@ -49,7 +49,13 @@ typedef struct	s_cub
 	t_player_pos		plyer_pos;
 	t_garbage_node	*garbage_head;
 }   t_cub;
-
+int	one_player_on_map(char **map);
+char	**dup_map(char **map);
+void	get_player_pos(t_cub **cb);
+int	cub_items(char *map_line, t_cub *cb_st);
+int	parse_map(char **map, t_cub **cb_st);
+int	check_wall(char *map_line);
+int	asign_map(t_cred_list *list, t_cub **cub);
 int	asign_colors(t_cred_list *list, t_cub **cb_st);
 int	asign_texters(t_cred_list *list, t_cub **cub);
 int	missing_or_dup(t_cred_list *list);
@@ -60,10 +66,10 @@ int	valid_map_arg(char *arg);
 char	**get_argb_colors(int fd);
 int	add_content(t_cred_list **map_list, char *content);
 int	get_list_size(t_cred_list *map_list);
-char	**get_map(int fd);
+char	**get_map(t_cred_list *list);
 char	**convert_to_td(t_cred_list *map_list);
 int	td_len(char **td);
-void	print_td(char **str, int len);
+void	print_td(char **str);
 t_cred_list	*grap_credantials(int fd);
 int	check_content_order(t_cred_list *list);
 int	is_map_line(char *line);

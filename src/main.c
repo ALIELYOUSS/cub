@@ -9,9 +9,11 @@ int extract_credantials(t_cub **cb_st, int fd)
 		return (0);
 	if (!missing_or_dup(list) || !check_content_order(list))
 		return (0);
-	if (!asign_texters(list, cb_st))
+	else if (!asign_texters(list, cb_st))
 		return (0);
-	if (!asign_colors(list, cb_st))
+	else if (!asign_colors(list, cb_st))
+		return (0);
+	else if (!asign_map(list, cb_st))
 		return (0);
 	return (1);
 }
@@ -20,7 +22,7 @@ int	parse_arguments(t_cub **cb_st, char **av)
 {
 	int fd;
 
-	if (cb_st || !valid_map_arg(av[1]))
+	if (!valid_map_arg(av[1]))
 		return (0);
 	fd = open(av[1], O_RDONLY);
 	if (fd < 0)
@@ -46,12 +48,15 @@ int main(int ac, char **av)
 		return (printf("invalid arguments !"), 1);
 	cub_st = malloc(sizeof(t_cub));
 	if (!cub_st)
-		return (printf("malloc failed !"), 1);
+		return (perror(""), 1);
 	if (!parse_arguments(&cub_st, av))
 		return (1);
 		printf("%s\n", cub_st->ea_texture);
 	printf("%s\n", cub_st->no_texture);
 	printf("%s\n", cub_st->so_texture);
 	printf("%s\n", cub_st->we_texture);
+	printf("%i, %i, %i\n", cub_st->floor_color[0], cub_st->floor_color[1], cub_st->floor_color[2]);
+	printf("%i, %i, %i\n", cub_st->ceiling_color[0], cub_st->ceiling_color[1], cub_st->ceiling_color[2]);
+	print_td(cub_st->map);
 	return (0);
 }

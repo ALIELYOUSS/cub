@@ -39,10 +39,10 @@ int	add_content(t_cred_list **list, char *content)
 	return (1);
 }
 
-void    print_td(char **str, int len)
+void    print_td(char **str)
 {
 	int i = 0;
-	while (str && str[i] && i < len)
+	while (str && str[i])
 	{
 		printf("%s", str[i]);
 		i++;
@@ -154,11 +154,20 @@ t_cred_list	*grap_credantials(int fd)
 			line = get_next_line(fd);
 			continue ;
 		}
-		content = ft_strtrim(line, " ");
-		if (!content)
+		if (!is_map_line(line))
+			content = ft_strtrim(line, " ");
+		else if (!content)
 			return (free_list(list), NULL);
-		if (!add_content(&list, content))
-			return (free_list(list), NULL);
+		if (!is_map_line(line))
+		{
+			if (!add_content(&list, content))
+				return (free_list(list), NULL);
+		}
+		else
+		{
+			if (!add_content(&list, line))
+				return (free_list(list), NULL);
+		}
 		line = get_next_line(fd);
 	}
 	return (list);
@@ -171,7 +180,8 @@ int	is_map_line(char *line)
 	i = 0;
 	while (line[i])
 	{
-		if (line[i] != '1' && line[i] != '0' && line[i] != ' ' && line[i] != '\n')
+		if (line[i] != '1' && line[i] != '0' && line[i] != ' ' && line[i] != '\n'
+			&& line[i] != 'W' && line[i] != 'S' && line[i] != 'N' && line[i] != 'N')
 			return (0);
 		i++;
 	}
@@ -226,15 +236,15 @@ char	*get_wanted_line(t_cred_list *list, char *wanted)
 
 int	asign_texters(t_cred_list *list, t_cub **cub)
 {
-	if (!cub)
-		exit(EXIT_FAILURE);
+	if(!cub)
+		return (0);
 	(*cub)->no_texture = get_wanted_line(list, "NO");
 	(*cub)->so_texture = get_wanted_line(list, "SO");
 	(*cub)->we_texture = get_wanted_line(list, "WE");
 	(*cub)->ea_texture = get_wanted_line(list, "EA");
 	if (!(*cub)->no_texture || !(*cub)->so_texture 
 		|| !(*cub)->ea_texture || !(*cub)->we_texture)
-		return (0);
+		return (printf("moshkila am3lm"), 0);
 	return (1);
 }
 
@@ -254,6 +264,75 @@ int	str_is_digit(char *str)
 	return (1);
 }
 
+int	a_valid_argb(char *str)
+{
+	int	comma_counter;
+	int	i;
+
+	i = 0;
+	comma_counter = 0;
+	while (str && str[i])
+	{
+		if (str[i] == ',')
+			comma_counter++;
+		i++;
+	}
+	if (comma_counter > 2 || comma_counter < 2)
+			return (ft_putstr_fd ("value must be between 0 && 255\n", 2), 0);
+	return (1);
+}
+
+int	map_size(t_cred_list *list)
+{
+	t_cred_list	*tmp;
+	int			counter;
+
+	counter = 0;
+	tmp = list;
+	while (tmp && !is_map_line(tmp->content))
+		tmp = tmp->next;
+	while (tmp)
+	{
+		counter++;
+		tmp = tmp->next;
+	}
+	return (counter);
+}
+
+char	**get_map(t_cred_list *list)
+{
+	t_cred_list	*tmp;
+	char		**map;
+	int			index;
+
+	map = malloc(sizeof(char *) * map_size(list) + 1);
+	if(!map)
+		return (NULL);
+	map[map_size(list)] = NULL;
+	tmp = list;
+	while (tmp && !is_map_line(tmp->content))
+		tmp = tmp->next;
+	while (tmp && is_map_line(tmp->content))
+	{
+		map[index] = ft_strdup(tmp->content);
+		index++;
+		tmp = tmp->next;
+	}
+	return (map);
+}
+
+int	asign_map(t_cred_list *list, t_cub **cub)
+{
+	char	**map;
+
+	map = get_map(list);
+	if (!map)
+		return (0);
+	if (!parse_map(map, cub))
+		return (0);
+	return (1);
+}
+
 int	asign_colors(t_cred_list *list, t_cub **cb_st)
 {
 	int		i;
@@ -265,19 +344,14 @@ int	asign_colors(t_cred_list *list, t_cub **cb_st)
 	i = 0;
 	tmp1 = get_wanted_line(list, "C");
 	tmp = get_wanted_line(list, "F");
-	if (!tmp || tmp1)
+	if (!tmp1 || !tmp)
 		return (0);
-	f = ft_split(tmp1 + 1, ',');
-	c = ft_split(tmp + 1, ',');
-	if (!f || !c || !f[0] || !f[1]
-			|| !f[2] || !c[0] || !c[1] || !c[2])
-		return (ft_putstr_fd("collor must be 255,255,255\n", 2), 0);
-	while (f && c && f[i] && c[i])
-	{
-		if (!str_is_digit(f[i]) || !str_is_digit(c[i]))
-			return (ft_putstr_fd("collors must be digit\n", 2), 0);
-		i++;
-	}
+	if (!a_valid_argb(tmp1) || !a_valid_argb(tmp))
+		return (printf("error\n"), 0);
+	c = ft_split(tmp1 + 2, ',');
+	f = ft_split(tmp + 2, ',');
+	if (!c || !f)
+		return (0);
 	(*cb_st)->floor_color[0] = ft_atoi(f[0]);
 	(*cb_st)->floor_color[1] = ft_atoi(f[1]);
 	(*cb_st)->floor_color[2] = ft_atoi(f[2]);
@@ -288,5 +362,148 @@ int	asign_colors(t_cred_list *list, t_cub **cb_st)
 		|| (*cb_st)->floor_color[1] > 255 || (*cb_st)->ceiling_color[0] > 255
 		|| (*cb_st)->floor_color[2] > 255 || (*cb_st)->ceiling_color[2] > 255)
 			return (ft_putstr_fd ("value must be between 0 && 255\n", 2), 0);
+	return (1);
+}
+
+int	one_player_on_map(char **map)
+{
+	int	count;
+	int	x;
+	int	y;
+
+	count = 0;
+	y = 0;
+	while (map && map[y])
+	{
+		x = 0;
+		while (map[y][x])
+		{
+			if (map[y][x] == 'N' || map[y][x] == 'W' || map[y][x] == 'S'
+				|| map[y][x] == 'E')
+				count++;
+			x++;
+		}
+		y++;
+	}
+	if (count != 1)
+		return (ft_putstr_fd("one player should be on map\n", 2), 0);
+	return (1);
+}
+
+void	get_player_pos(t_cub **cb)
+{
+	int		x;
+	int		y;
+	char	**map;
+
+	if (!cb || !*cb || !(*cb)->map)
+		return;
+	y = 0;
+	map = (*cb)->map;
+	while (map[y])
+	{
+		x = 0;
+		while (map[y][x])
+		{
+			if (map[y][x] == 'N' || map[y][x] == 'W' || map[y][x] == 'S'
+				|| map[y][x] == 'E')
+			{
+				(*cb)->plyer_pos.x = x;
+				(*cb)->plyer_pos.y = y;
+				return ;
+			}
+			x++;
+		}
+		y++;
+	}
+}
+
+int	closed_wall(char *map_line)
+{
+	int		i;
+	char	*line;
+
+	i = 0;
+	line = ft_strtrim(map_line, "  ");
+	if (!line)
+		return (0);
+	while (line && line[i])
+	{
+		if (line[i] != '1' || line[i] != ' ')
+		{
+			printf("%s\n", line);
+			return (printf("map must be surrended by walls \n"), 0);
+		}
+		i++;
+	}
+	return (1);
+}
+
+int	parse_map(char **map, t_cub **cb_st)
+{
+	int	y;
+	int max_lines;
+
+	if (!map || !map[0])
+		return (ft_putstr_fd("|| EMPTY MAP ! ||", 2), 0);
+	max_lines = td_len(map);
+	if (!closed_wall(map[0]))
+		return (0);
+	y = 1;
+	while (y < max_lines - 1)
+	{
+		if (!cub_items(map[y], *cb_st))
+			return (ft_putstr_fd("|| INVALID ITEM ON MAP ! |", 2), 0);
+		y++;
+	}
+	if (max_lines > 1 && !closed_wall(map[max_lines - 1]))
+		return (0);
+	if (!one_player_on_map(map))
+		return (0);
+	(*cb_st)->map_h = max_lines;
+	(*cb_st)->map = dup_map(map);
+	get_player_pos(cb_st);
+	return (1);
+}
+
+char	**dup_map(char **map)
+{
+	char	**dup_map;
+	int		i;
+
+	if (!map || !map)
+		return (NULL);
+	i = 0;
+	dup_map = malloc(sizeof(char *) * (td_len(map) + 1));
+	while (i < td_len(map))
+	{
+		dup_map[i] = ft_strdup(map[i]);
+		i++;
+	}
+	dup_map[i] = NULL;
+	return (dup_map);
+}
+
+int	cub_items(char *line, t_cub *cb_st)
+{
+	int		i;
+	char	*map_line;
+
+	i = 0;
+	map_line = ft_strtrim(line, " ");
+	if (!map_line || 
+		(map_line[0] && map_line[0] != '1' && map_line[ft_strlen(map_line)] != '1'))
+			return (printf("map must be surrended by wals"), 0);
+	while (map_line[i])
+	{
+		if (map_line[i] && map_line[i + 1] && map_line[i] == ' ' && map_line[i + 1] != '1')
+			return (printf("invalid map \n"), 0);
+		else if (map_line[i] != 'N' &&  map_line[i] != 'S' &&  map_line[i] != 'W'
+			&&  map_line[i] != 'E' && map_line[i] != '0' && map_line[i] !=  '1' && map_line[i] != ' ')
+			return (0);
+		i++;
+	}
+	if (!cb_st->map_w)
+		cb_st->map_w = i;
 	return (1);
 }
