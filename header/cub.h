@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cub.h                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: alel-you <alel-you@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/15 19:58:35 by alel-you          #+#    #+#             */
+/*   Updated: 2025/10/17 18:13:45 by alel-you         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef	CUB3D_H
 #define	CUB3D_H
 
@@ -47,32 +59,39 @@ typedef struct	s_cub
 	int				floor_color[3];
 	int				ceiling_color[3];
 	t_player_pos		plyer_pos;
-	t_garbage_node	*garbage_head;
 }   t_cub;
-int	one_player_on_map(char **map);
-char	**dup_map(char **map);
-void	get_player_pos(t_cub **cb);
-int	cub_items(char *map_line, t_cub *cb_st);
-int	parse_map(char **map, t_cub **cb_st);
-int	check_wall(char *map_line);
-int	asign_map(t_cred_list *list, t_cub **cub);
-int	asign_colors(t_cred_list *list, t_cub **cb_st);
-int	asign_texters(t_cred_list *list, t_cub **cub);
-int	missing_or_dup(t_cred_list *list);
-int	check_order(char **td);
-void	print_error(char *message);
-char	**dir_texters_path(int fd);
-int	valid_map_arg(char *arg);
-char	**get_argb_colors(int fd);
-int	add_content(t_cred_list **map_list, char *content);
-int	get_list_size(t_cred_list *map_list);
-char	**get_map(t_cred_list *list);
-char	**convert_to_td(t_cred_list *map_list);
-int	td_len(char **td);
-void	print_td(char **str);
+
+
 t_cred_list	*grap_credantials(int fd);
-int	check_content_order(t_cred_list *list);
-int	is_map_line(char *line);
-void	free_list(t_cred_list *list);
+char		*get_wanted_line(t_cred_list *list, char *wanted);
+void 	  	print_td(char **str);
+int			a_valid_argb(char *str);
+int			check_content_order(t_cred_list *list);
+int			asign_colors(t_cred_list *list, t_cub **cb_st);
+int 		extract_credantials(t_cub **cb_st, int fd);
+int			asign_texters(t_cred_list *list, t_cub **cub);
+int			check_dup(t_cred_list *list, char *to_check, int len);
+int			missing_or_dup(t_cred_list *list);
+int 		td_len(char **td);
+int			parse_arguments(t_cub **cb_st, char **av);
+int			is_wall(char *wall);
+int			add_content(t_cred_list **list, char *content);
+
+int			parse_map(char **map, t_cub **cb_st);
+int			get_largest_row(t_cred_list *list);
+char		*equal_rows(char *line_map, int len);
+char		**dup_map(char **map, t_cred_list *list);
+int			get_map(t_cred_list *list, t_cub **cub);
+int 		valid_map_arg(char *arg);
+int			one_player_on_map(char **map);
+int			cub_items(char *line, t_cub *cb_st);
+int			closed_map(char **map);
+int			is_map_line(char *line);
+int 		valid_map_arg(char *arg);
+int			map_size(t_cred_list *list);
+int			asign_map(t_cred_list *list, t_cub **cub);
+
+void		*malloc(size_t size);
+void		garbage_add(t_garbage_node **gb_list, t_garbage_node *new);
 
 #endif

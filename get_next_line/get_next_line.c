@@ -6,7 +6,7 @@
 /*   By: alel-you <alel-you@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 23:32:14 by alel-you          #+#    #+#             */
-/*   Updated: 2024/12/03 18:06:04 by alel-you         ###   ########.fr       */
+/*   Updated: 2025/10/16 16:50:05 by alel-you         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,12 @@ static char	*ft_joing_data(char *s1, char *s2)
 		return (ft_strdup(s2));
 	len = ft_strlen(s1) + ft_strlen(s2);
 	joined = malloc(sizeof(char) * (len + 1));
-	if (!joined)
-		return (NULL);
 	while (s1 && s1[i])
 		joined[x++] = s1[i++];
 	i = 0;
 	while (s2 && s2[i])
 		joined[x++] = s2[i++];
 	joined[x] = '\0';
-	free(s1);
 	return (joined);
 }
 
@@ -46,13 +43,11 @@ static char	*ft_read_from_fd(char *rest, int fd)
 
 	readed_bytes = 1;
 	tmp = malloc(BUFFER_SIZE + 1);
-	if (!tmp)
-		return (free(rest), NULL);
 	while (readed_bytes > 0)
 	{
 		readed_bytes = read(fd, tmp, BUFFER_SIZE);
 		if (readed_bytes == -1)
-			return (free(tmp), free(rest), NULL);
+			return (NULL);
 		if (readed_bytes == 0)
 			break ;
 		tmp[readed_bytes] = '\0';
@@ -60,7 +55,6 @@ static char	*ft_read_from_fd(char *rest, int fd)
 		if (ft_strchr(rest, '\n'))
 			break ;
 	}
-	free(tmp);
 	return (rest);
 }
 
@@ -72,9 +66,8 @@ static char	*ft_extrct_shift(char **rest)
 	tmp = *rest;
 	line = ft_getline(tmp);
 	if (!line)
-		return (free(*rest), *rest = NULL, NULL);
+		return (*rest = NULL, NULL);
 	*rest = ft_get_rest(tmp);
-	free(tmp);
 	return (line);
 }
 

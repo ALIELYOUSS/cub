@@ -1,10 +1,11 @@
-FILES = src/main.c src/utils.c get_next_line/get_next_line.c get_next_line/get_next_line_utils.c
+FILES = src/main.c src/utils/parce_utils.c src/utils/map_utils.c src/utils/map_utils1.c src/utils/utils.c src/utils/utils1.c  get_next_line/get_next_line.c get_next_line/get_next_line_utils.c
 
 OBJ = $(FILES:.c=.o)
 
-CC = gcc
+CC = cc
 
-FLAGS = -Wall -Wextra -Werror -g3
+FLAGS = -Wall -Wextra -Werror #-fsanitize=address -g3
+
 MLX_FLAGS = -lm 
 
 NAME = cub3d
@@ -16,7 +17,7 @@ all: $(NAME)
 	
 $(NAME): $(OBJ)
 	@make -C ./libft
-	@$(CC) $(OBJ) libft/libft.a -fsanitize=address -g3 -o $(NAME)
+	@$(CC) $(OBJ) $(FLAGS) libft/libft.a -o $(NAME)
 
 clean:
 	@make -C ./libft clean

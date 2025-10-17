@@ -6,7 +6,7 @@
 /*   By: alel-you <alel-you@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 19:03:54 by alel-you          #+#    #+#             */
-/*   Updated: 2024/11/17 16:35:12 by alel-you         ###   ########.fr       */
+/*   Updated: 2025/10/16 16:23:10 by alel-you         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <limits.h>
+# include "../header/cub.h"
 # define MAX_SIZE 1844674407370955161
 
 typedef struct s_list
@@ -80,4 +81,5 @@ void	ft_lstclear(t_list **lst, void (*del)(void *));
 void	ft_lstiter(t_list *lst, void (*f)(void *));
 void	ft_putnbr_fd(int n, int fd);
 char	*ft_strjoin(char *s1, const char *s2);
+
 #endif
