@@ -6,7 +6,7 @@
 /*   By: alel-you <alel-you@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 20:01:06 by alel-you          #+#    #+#             */
-/*   Updated: 2025/10/17 18:48:31 by alel-you         ###   ########.fr       */
+/*   Updated: 2025/10/19 20:43:59 by alel-you         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	is_map_line(char *line)
 	while (line[i])
 	{
 		if (line[i] != '1' && line[i] != '0' && line[i] != ' ' && line[i] != '\n'
-			&& line[i] != 'W' && line[i] != 'S' && line[i] != 'N' && line[i] != 'N')
+			&& line[i] != 'W' && line[i] != 'S' && line[i] != 'N' && line[i] != 'E')
 			return (0);
 		i++;
 	}
@@ -51,7 +51,7 @@ int	get_largest_row(t_cred_list *list)
 	int			len;
 
 	if (!list)
-		return (puts("lqwada"), exit(0), 0);
+		return (0);
 	largest = 0;
 	len = 0;
 	tmp = list;

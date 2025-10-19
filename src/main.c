@@ -6,7 +6,7 @@
 /*   By: alel-you <alel-you@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 19:58:22 by alel-you          #+#    #+#             */
-/*   Updated: 2025/10/17 18:21:45 by alel-you         ###   ########.fr       */
+/*   Updated: 2025/10/19 20:47:01 by alel-you         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,14 @@ int	parse_map(char **map, t_cub **cb_st)
 	y = 1;
 	if (!map)
 		return (0);
-	else if (!closed_map(map))
+	if (!closed_map(map))
 		return (0);
 	while (map[y] != NULL)
 	{
 		if (!cub_items(map[y], *cb_st))
 			return (printf("map has unknow item\n"), 0);
+		else if (!strcmp(map[y], "\n"))
+			return (printf("Error\nnew line in map\n"), 0);
 		y++;
 	}
 	if (!one_player_on_map(map))

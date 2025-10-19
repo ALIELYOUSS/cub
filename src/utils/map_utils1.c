@@ -6,7 +6,7 @@
 /*   By: alel-you <alel-you@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 20:19:55 by alel-you          #+#    #+#             */
-/*   Updated: 2025/10/17 19:01:19 by alel-you         ###   ########.fr       */
+/*   Updated: 2025/10/19 20:32:15 by alel-you         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,14 @@ char	*equal_rows(char *line_map, int len)
 		}
 		else if (line_map[i] == ' ')
 		{
-			dup[x++] = '2';
+			dup[x++] = '.';
 			i++;
 			continue ;
 		}
 		i++;	
 	}
 	while (x < len - 1)
-		dup[x++] = '2';
+		dup[x++] = '.';
 	dup[len - 1] = '\n';
 	dup[len + 1] = '\0';
 	return (dup);
@@ -75,6 +75,29 @@ char	**dup_map(char **map, t_cred_list *list)
 	return (dup_map);
 }
 
+int	valid_map_line(char *line)
+{
+	int	i;	
+
+	i = 0;
+	if (!line)
+		return (0);
+	if (line[0] && line[0] != '1')
+		return (printf("Error\nmap must be close by walls\n"), 0);
+	while (line[i])
+	{
+		if ((line[i + 1] && line[i] == '0' && line[i  + 1] == ' '))
+			return (printf("Error\nMap persed '-'\n"), 0);
+		else if (line[i  + 1] && line[i] == ' ' && line[i + 1] != ' ' 
+			&& line[i + 1] != '1')
+			return (printf("Error\nMap persed '-'\n"), 0);
+		else if (!line[i + 1] && line[i] == '\n' && line[i - 1] != '1')
+			return (printf("Error\nmap is not closed by walls\n"), 0);
+		i++;
+	}
+	return (1);
+}
+
 int	closed_map(char **map)
 {
 	char	*line;
@@ -90,9 +113,8 @@ int	closed_map(char **map)
 		line = ft_strtrim(map[y], " ");
 		if (!line)
 			return (0);
-		line_len = ft_strlen(map[y] - 1);
-		if (!line || (line[0] && line[0] != '1' && line[line_len] != '1'))
-			return (printf("Error\nmap isn't closed by walls\n"), 0);
+		else if (!valid_map_line(line))
+			return (0);
 		y++;
 	}
 	if (!is_wall(map[td_len(map) - 1]))
@@ -120,7 +142,7 @@ int	cub_items(char *line, t_cub *cb_st)
 		i++;
 	}
 	if (!map_line)
-		return (printf("Error\n"),0);
+		return (printf("Error\n"), 0);
 	return (1);
 }
 

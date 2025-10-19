@@ -6,7 +6,7 @@
 /*   By: alel-you <alel-you@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 20:16:35 by alel-you          #+#    #+#             */
-/*   Updated: 2025/10/17 21:10:53 by alel-you         ###   ########.fr       */
+/*   Updated: 2025/10/19 18:07:37 by alel-you         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,10 @@ int	a_valid_argb(char *str)
 			comma_counter++;
 		i++;
 	}
-	if (comma_counter > 2 || comma_counter < 2)
-			return (ft_putstr_fd ("Error\nvalue must be between 0 && 255\n", 2), 0);
+	if (comma_counter > 2)
+		return (ft_putstr_fd ("Error\ninvalid color format '-,-' !\n", 2), 0);
+	if (comma_counter < 2)
+		return (ft_putstr_fd ("Error\nmissing a color!\n", 2), 0);
 	return (1);
 }
 

@@ -6,7 +6,7 @@
 /*   By: alel-you <alel-you@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 19:58:14 by alel-you          #+#    #+#             */
-/*   Updated: 2025/10/17 18:01:11 by alel-you         ###   ########.fr       */
+/*   Updated: 2025/10/19 21:48:35 by alel-you         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,9 @@ t_cred_list	*grap_credantials(int fd)
 	t_cred_list	*list;
 	char		*line;
 	char		*content;
+	int			f;
 
+	f = 0;
 	content = NULL;
 	line = get_next_line(fd);
 	list = malloc(sizeof(t_cred_list));
@@ -26,8 +28,9 @@ t_cred_list	*grap_credantials(int fd)
 	list = NULL;
 	while (line)
 	{
-		if (!strcmp(line, "\n") || !line[0])
+		if (!f && !strcmp(line, "\n"))
 		{
+			printf("%s\n", line);
 			line = get_next_line(fd);
 			continue ;
 		}
@@ -42,6 +45,7 @@ t_cred_list	*grap_credantials(int fd)
 		}
 		else
 		{
+			f = 1;
 			if (!add_content(&list, line))
 				return (NULL);
 		}
@@ -66,7 +70,7 @@ int extract_credantials(t_cub **cb_st, int fd)
 
 	list = grap_credantials(fd);
 	if (!list)
-		return (puts("shhed zb"), 0);
+		return (0);
 	if (!missing_or_dup(list) || !check_content_order(list))
 		return (0);
 	else if (!asign_texters(list, cb_st))

@@ -6,7 +6,7 @@
 /*   By: alel-you <alel-you@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 20:11:17 by alel-you          #+#    #+#             */
-/*   Updated: 2025/10/17 21:13:01 by alel-you         ###   ########.fr       */
+/*   Updated: 2025/10/19 17:19:39 by alel-you         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,9 +109,9 @@ int	asign_colors(t_cred_list *list, t_cub **cb_st)
 		(*cb_st)->ceiling_color[0] = ft_atoi(c[0]);
 		(*cb_st)->ceiling_color[1] = ft_atoi(c[1]);
 		(*cb_st)->ceiling_color[2] = ft_atoi(c[2]);
-	if ((*cb_st)->floor_color[0] > -1 || (*cb_st)->ceiling_color[1] > -1
-		|| (*cb_st)->floor_color[1] > -1 || (*cb_st)->ceiling_color[0] > -1
-		|| (*cb_st)->floor_color[2] > -1 || (*cb_st)->ceiling_color[2] > -1)
+	if ((*cb_st)->floor_color[0] < 0 || (*cb_st)->ceiling_color[1] < 0
+		|| (*cb_st)->floor_color[1] < 0 || (*cb_st)->ceiling_color[0] < 0
+		|| (*cb_st)->floor_color[2] < 0 || (*cb_st)->ceiling_color[2] < 0)
 			return (0);
 	return (1);
 }
