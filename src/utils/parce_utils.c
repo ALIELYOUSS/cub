@@ -6,7 +6,7 @@
 /*   By: alel-you <alel-you@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 19:58:14 by alel-you          #+#    #+#             */
-/*   Updated: 2025/10/19 21:48:35 by alel-you         ###   ########.fr       */
+/*   Updated: 2025/10/20 03:43:27 by alel-you         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ t_cred_list	*grap_credantials(int fd)
 	{
 		if (!f && !strcmp(line, "\n"))
 		{
-			printf("%s\n", line);
 			line = get_next_line(fd);
 			continue ;
 		}
@@ -115,6 +114,6 @@ int	parse_arguments(t_cub **cb_st, char **av)
 	(*cb_st)->we_texture = NULL;
 	(*cb_st)->ea_texture = NULL;
 	if (!extract_credantials(cb_st, fd))
-		return (puts("ahhhhhhhhhhhh"), 0);
+		return (0);
 	return (1);
 }

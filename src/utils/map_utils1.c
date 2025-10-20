@@ -6,7 +6,7 @@
 /*   By: alel-you <alel-you@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 20:19:55 by alel-you          #+#    #+#             */
-/*   Updated: 2025/10/19 20:32:15 by alel-you         ###   ########.fr       */
+/*   Updated: 2025/10/20 04:13:37 by alel-you         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ char	*equal_rows(char *line_map, int len)
 	while (x < len - 1)
 		dup[x++] = '.';
 	dup[len - 1] = '\n';
-	dup[len + 1] = '\0';
+	dup[len] = '\0';
 	return (dup);
 }
 
@@ -98,28 +98,64 @@ int	valid_map_line(char *line)
 	return (1);
 }
 
-int	closed_map(char **map)
+int closed_map(char **map)
 {
-	char	*line;
-	int		y;
-	int		line_len;
+    int y;
+    int x;
+    int len_up, len_down, len_cur;
 
-	y = 1;
-	line_len = 0;
-	if (!is_wall(map[0]))
-		return (printf("Error\nfirst map_line isn't closed '-'\n"), 0);
-	while (map[y]  && y < td_len(map) - 1)
+    if (!is_wall(map[0]))
+        return (printf("Error\nfirst map line isn't closed\n"), 0);
+    y = 1;
+    while (map[y] && y < td_len(map) - 1)
+    {
+        len_cur = strlen(map[y]);
+        x = 0;
+        while (x < len_cur)
+        {
+            if (map[y][x] == '0' || is_player(map[y][x]))
+            {
+                len_up = strlen(map[y - 1]);
+                len_down = strlen(map[y + 1]);
+                if (x >= len_up || x >= len_down)
+                    return (0);
+                if (map[y - 1][x] != '1' || map[y + 1][x] != '1' ||
+					(x > 0 && map[y][x - 1] != '1') ||
+					(x + 1 < len_cur && map[y][x + 1] != '1'))
+				{
+					return (0);
+				}
+            }
+            x++;
+        }
+        y++;
+    }
+    if (!is_wall(map[td_len(map) - 1]))
+        return (printf("Error\nlast map line isn't closed\n"), 0);
+    return (1);
+}
+
+void	player_position(char **map, t_cub **cub)
+{
+	int	x;
+	int	y;
+
+	y = 0;
+	while (map[y])
 	{
-		line = ft_strtrim(map[y], " ");
-		if (!line)
-			return (0);
-		else if (!valid_map_line(line))
-			return (0);
+		x = 0;
+		while (map[y][x])
+		{
+			if (map[y][x] == 'N' || map[y][x] == 'E'|| map[y][x] == 'S'|| map[y][x] == 'W')
+			{
+				(*cub)->plyer_pos.x = x;		
+				(*cub)->plyer_pos.y = y;
+			}
+			x++;
+		}
 		y++;
 	}
-	if (!is_wall(map[td_len(map) - 1]))
-		return (printf("Error\nlast map line isn't closed '-'\n"), 0);
-	return (1);
+	(*cub)->map_h = y;
 }
 
 int	cub_items(char *line, t_cub *cb_st)

@@ -6,7 +6,7 @@
 /*   By: alel-you <alel-you@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 20:01:06 by alel-you          #+#    #+#             */
-/*   Updated: 2025/10/19 20:43:59 by alel-you         ###   ########.fr       */
+/*   Updated: 2025/10/20 03:58:13 by alel-you         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	map_size(t_cred_list *list)
 	tmp = list;
 	while (tmp && !is_map_line(tmp->content))
 		tmp = tmp->next;
-	while (tmp)
+	while (tmp && is_map_line(tmp->content))
 	{
 		counter++;
 		tmp = tmp->next;
@@ -89,7 +89,8 @@ int	get_map(t_cred_list *list, t_cub **cub)
 		index++;
 		tmp = tmp->next;
 	}
-	if (!parse_map(map, cub))
+	(*cub)->map_w = get_largest_row(list);
+	if (!parse_map(map, cub, list))
 		return (0);
 	(*cub)->map = dup_map(map, list);
 	if (!(*cub)->map)

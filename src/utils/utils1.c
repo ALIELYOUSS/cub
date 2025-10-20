@@ -6,7 +6,7 @@
 /*   By: alel-you <alel-you@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 20:16:35 by alel-you          #+#    #+#             */
-/*   Updated: 2025/10/19 18:07:37 by alel-you         ###   ########.fr       */
+/*   Updated: 2025/10/20 04:12:09 by alel-you         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	is_wall(char *wall)
 		return (0);
 	while (wall[i] && wall[i] != '\n')
 	{
-		if (wall[i] != '1' && wall[i] != ' ')
+		if (wall[i] != '1' && wall[i] != ' ' && wall[i] != '.')
 			return (0);
 		i++;
 	}
