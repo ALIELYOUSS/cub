@@ -102,36 +102,35 @@ int closed_map(char **map)
 {
     int y;
     int x;
-    int len_up, len_down, len_cur;
+    int len;
 
-    if (!is_wall(map[0]))
-        return (printf("Error\nfirst map line isn't closed\n"), 0);
-    y = 1;
-    while (map[y] && y < td_len(map) - 1)
+    if (!map)
+        return (0);
+    
+    y = 0;
+    while (map[y])
     {
-        len_cur = strlen(map[y]);
+        len = strlen(map[y]);
+        if (len > 0 && map[y][len-1] == '\n')
+            len--;
         x = 0;
-        while (x < len_cur)
+        while (x < len)
         {
             if (map[y][x] == '0' || is_player(map[y][x]))
             {
-                len_up = strlen(map[y - 1]);
-                len_down = strlen(map[y + 1]);
-                if (x >= len_up || x >= len_down)
-                    return (0);
-                if (map[y - 1][x] != '1' || map[y + 1][x] != '1' ||
-					(x > 0 && map[y][x - 1] != '1') ||
-					(x + 1 < len_cur && map[y][x + 1] != '1'))
-				{
-					return (0);
-				}
+                if (x == 0 || map[y][x-1] == ' ')
+                    return (printf("Error: walkable area exposed to void at y=%d, x=%d (left)\n", y, x), 0);
+                if (x == len - 1 || map[y][x + 1] == ' ')
+                    return (printf("Error: walkable area exposed to void at y=%d, x=%d (right)\n", y, x), 0);
+                if (y == 0 || x >= strlen(map[y - 1]) || map[y - 1][x] == ' ' || map[y - 1][x] == '\n')
+                    return (printf("Error: walkable area exposed to void at y=%d, x=%d (up)\n", y, x), 0);
+                if (y == td_len(map) - 1 || x >= strlen(map[y + 1]) || map[y + 1][x] == ' ' || map[y + 1][x] == '\n')
+                    return (printf("Error: walkable area exposed to void at y=%d, x=%d (down)\n", y, x), 0);
             }
             x++;
         }
         y++;
     }
-    if (!is_wall(map[td_len(map) - 1]))
-        return (printf("Error\nlast map line isn't closed\n"), 0);
     return (1);
 }
 

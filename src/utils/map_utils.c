@@ -17,6 +17,10 @@ int	is_map_line(char *line)
 	int	i;
 
 	i = 0;
+	if (!line)
+		return (0);
+	if (line[0] == '\0' || (line[0] == '\n' && line[1] == '\0'))
+		return (0);
 	while (line[i])
 	{
 		if (line[i] != '1' && line[i] != '0' && line[i] != ' ' && line[i] != '\n'
@@ -72,12 +76,13 @@ int	get_map(t_cred_list *list, t_cub **cub)
 	t_cred_list	*tmp;
 	char		**map;
 	int			index;
+	int			map_sz;
 
 	index = 0;
-	map = malloc(sizeof(char *) * map_size(list));
+	map = malloc(sizeof(char *) * (map_size(list)) + 1);
 	if(!map)
 		return (0);
-	map[map_size(list)] = NULL;
+	map[map_size(list) + 1] = NULL;
 	tmp = list;
 	while (tmp && !is_map_line(tmp->content))
 		tmp = tmp->next;
@@ -95,6 +100,5 @@ int	get_map(t_cred_list *list, t_cub **cub)
 	(*cub)->map = dup_map(map, list);
 	if (!(*cub)->map)
 		return (0);
-	print_td((*cub)->map);
 	return (1);
 }

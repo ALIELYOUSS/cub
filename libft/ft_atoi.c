@@ -37,11 +37,9 @@ int	parse_line(char const *str)
 int	ft_atoi(char const *str)
 {
 	int		i;
-	int		sign;
 	long	tmp;
 
 	i = 0;
-	sign = 1;
 	tmp = 0;
 	if (!str)
 		return (0);
