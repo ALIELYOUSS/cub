@@ -6,7 +6,7 @@
 /*   By: alel-you <alel-you@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 19:58:35 by alel-you          #+#    #+#             */
-/*   Updated: 2025/10/20 04:01:08 by alel-you         ###   ########.fr       */
+/*   Updated: 2025/10/20 23:04:38 by alel-you         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,13 +65,14 @@ int			check_content_order(t_cred_list *list);
 int			asign_colors(t_cred_list *list, t_cub **cb_st);
 int 		extract_credantials(t_cub **cb_st, int fd);
 int			asign_texters(t_cred_list *list, t_cub **cub);
-int			check_dup(t_cred_list *list, char *to_check, int len);
+int			check_dup(t_cred_list *list, char *to_check);
 int			missing_or_dup(t_cred_list *list);
 int 		td_len(char **td);
 int			parse_arguments(t_cub **cb_st, char **av);
-int			is_wall(char *wall);
 int			add_content(t_cred_list **list, char *content);
+int			empty_line(char *line);
 
+void		player_spwn_or(char s, t_cub **cub);
 void		player_position(char **map, t_cub **cub);
 int			parse_map(char **map, t_cub **cb_st, t_cred_list *list);
 int			get_largest_row(t_cred_list *list);
@@ -80,13 +81,16 @@ char		**dup_map(char **map, t_cred_list *list);
 int			get_map(t_cred_list *list, t_cub **cub);
 int 		valid_map_arg(char *arg);
 int			one_player_on_map(char **map);
-int			cub_items(char *line, t_cub *cb_st);
+int			cub_items(char *line);
 int 		is_player(char c);
 int			closed_map(char **map);
 int			is_map_line(char *line);
 int 		valid_map_arg(char *arg);
 int			map_size(t_cred_list *list);
 int			asign_map(t_cred_list *list, t_cub **cub);
+
+//tools
+void	print_cred(t_cub *cb);
 
 // void		*ft_malloc(size_t size);
 // void		garbage_add(t_garbage_node **gb_list, t_garbage_node *new);

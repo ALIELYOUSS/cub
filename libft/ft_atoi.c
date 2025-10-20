@@ -6,7 +6,7 @@
 /*   By: alel-you <alel-you@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 22:53:56 by alel-you          #+#    #+#             */
-/*   Updated: 2025/10/19 22:04:52 by alel-you         ###   ########.fr       */
+/*   Updated: 2025/10/20 23:11:43 by alel-you         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ int	parse_line(char const *str)
 		return (printf("Error\nonly feeds on positive numbers\n"), 0);
 	while (str[i] && str[i] == ' ')
 		i++;
-	if (!str[i])
-		return (printf("Error\nmissing color\n"), -1);
+	if (!str[i] || str[i] == '\n')
+		return (printf("Error\nmissing color\n"), 0);
 	while (str[i])
 	{
 		if (!ft_isdigit(str[i]) && str[i] != ' ' && str[i] != '\n')
@@ -42,7 +42,7 @@ int	ft_atoi(char const *str)
 	i = 0;
 	tmp = 0;
 	if (!str)
-		return (0);
+		return (-1);
 	else if (!parse_line(str))
 		return (-1);
 	while (str[i] && str[i] >= '0' && str[i] <= '9')

@@ -6,22 +6,32 @@
 /*   By: alel-you <alel-you@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 20:11:17 by alel-you          #+#    #+#             */
-/*   Updated: 2025/10/19 17:19:39 by alel-you         ###   ########.fr       */
+/*   Updated: 2025/10/20 23:07:32 by alel-you         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../header/cub.h"
 
-int	check_dup(t_cred_list *list, char *to_check, int len)
+int	check_dup(t_cred_list *list, char *to_check)
 {
 	t_cred_list	*tmp;
+	char		**p;
+	char		*t;
 	int			counter;
 
 	counter = 0;
 	tmp = list;
 	while (tmp)
 	{
-		if (!ft_strncmp(tmp->content, to_check, len))
+		if (empty_line(tmp->content))
+		{
+			tmp = tmp->next;
+			continue ;
+		}
+		p = ft_split(tmp->content, ' ');
+		if (!p || !p[0])
+			return (0);
+		if (!strcmp(p[0], to_check))
 			counter++;
 		tmp = tmp->next;
 	}
@@ -35,11 +45,11 @@ int	missing_or_dup(t_cred_list *list)
 
 	checker = 0;
 	tmp = list;
-	if (check_dup(list, "SO", 2) > 1 || check_dup(list, "WE", 2) > 1 ||  check_dup(list, "EA", 2) > 1
-		|| check_dup(list, "NO", 2) > 1 || check_dup(list, "C", 1) > 1 ||check_dup(list, "F", 1) > 1)
+	if (check_dup(list, "SO") > 1 || check_dup(list, "WE") > 1 ||  check_dup(list, "EA") > 1
+		|| check_dup(list, "NO") > 1 || check_dup(list, "C") > 1 ||check_dup(list, "F") > 1)
 		return (printf("error DUPLICATED lines in map file !\n"), 0);
-	if (!check_dup(list, "SO", 2) || !check_dup(list, "WE", 2) || !check_dup(list, "EA", 2)
-		|| !check_dup(list, "NO", 2) || !check_dup(list, "C", 1) || !check_dup(list, "F", 1))
+	if (!check_dup(list, "SO") || !check_dup(list, "WE") || !check_dup(list, "EA")
+		|| !check_dup(list, "NO") || !check_dup(list, "C") || !check_dup(list, "F"))
 		return (printf("error MISSING lines in map file !\n"), 0);
 	return (1);
 }

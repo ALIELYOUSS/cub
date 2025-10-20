@@ -6,25 +6,27 @@
 /*   By: alel-you <alel-you@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 19:58:22 by alel-you          #+#    #+#             */
-/*   Updated: 2025/10/20 04:11:31 by alel-you         ###   ########.fr       */
+/*   Updated: 2025/10/20 23:15:27 by alel-you         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/cub.h"
 
-void    print_td(char **str)
+int	is_player(char c)
 {
-	int i = 0;
-	while (str && str[i])
-	{
-		printf("%s", str[i]);
-		i++;
-	}
+	return (c == 'N' || c == 'S' || c == 'E' || c == 'W');
 }
 
-int is_player(char c)
+int	empty_line(char *line)
 {
-    return (c == 'N' || c == 'S' || c == 'E' || c == 'W');
+	int	i;
+	
+	i = 0;
+	while (line && line[i] && line[i] == ' ')
+		i++;
+	if (!line[i] || line[i] == '\n')
+		return (1);
+	return (0);
 }
 
 int	parse_map(char **map, t_cub **cb_st, t_cred_list *list)
@@ -32,34 +34,28 @@ int	parse_map(char **map, t_cub **cb_st, t_cred_list *list)
 	int		y;
 	char	**p_map;
 
-	y = 1;
-	if (!map)
-		return (0);
-	player_position(map, cb_st);
+	y = 0;
+	if (!map || !map[0])
+		return (printf("Error\n missing map\n"), 0);
 	if (!closed_map(map))
-		return (printf("Error\nmap isn't close\n"), 0);
+		return (0);
 	while (map[y] != NULL)
 	{
-		if (!cub_items(map[y], *cb_st))
+		if (empty_line(map[y]))
+			return (printf("remove emty lines from map\n"), 0);
+		if (!cub_items(map[y]))
 			return (printf("map has unknow item\n"), 0);
 		y++;
 	}
 	if (!one_player_on_map(map))
 		return (printf("Error\n"), 0);
+	player_position(map, cb_st);
 	return (1);
 }
 
-void	print_cred(t_cub *cb)
+int	main(int ac, char **av)
 {
-	printf("%s\n %s\n %s\n %s\n", cb->no_texture, cb->we_texture,cb->so_texture, cb->ea_texture);
-	printf("%d, %d, %d\n", cb->floor_color[0], cb->floor_color[1], cb->floor_color[2]);
-	printf("%d, %d, %d\n", cb->ceiling_color[0], cb->ceiling_color[1], cb->ceiling_color[2]);
-	print_td(cb->map);
-}
-
-int main(int ac, char **av)
-{
-	t_cub   *cub_st;
+	t_cub	*cub_st;
 
 	cub_st = NULL;
 	if (ac <= 1)

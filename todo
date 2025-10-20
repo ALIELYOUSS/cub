@@ -9,13 +9,15 @@ Week 1: Critical Fixes
 
  Day 3: Fix enum conflicts (Task 5.1) done
 
- Day 1: Fix garbage collector (Task 1.1) pending
+ Day 1: Fix garbage collector (Task 1.1) working on
 
 Week 2: Validation
 
- Day 4: Implement flood fill (Task 2.2)
- Day 5: Save player position (Task 2.3)
- Day 6: Validate textures (Task 4.1)
+ Day 4: Implement flood fill (Task 2.2) done
+
+ Day 5: Save player position (Task 2.3) done
+
+ Day 6: Validate textures (Task 4.1) woking on
  Day 7: Test with various maps
 
 Week 3: Polish

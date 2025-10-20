@@ -6,7 +6,7 @@
 /*   By: alel-you <alel-you@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 20:16:35 by alel-you          #+#    #+#             */
-/*   Updated: 2025/10/20 04:12:09 by alel-you         ###   ########.fr       */
+/*   Updated: 2025/10/20 17:18:06 by alel-you         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,26 +43,6 @@ int	a_valid_argb(char *str)
 		return (ft_putstr_fd ("Error\ninvalid color format '-,-' !\n", 2), 0);
 	if (comma_counter < 2)
 		return (ft_putstr_fd ("Error\nmissing a color!\n", 2), 0);
-	return (1);
-}
-
-int	is_wall(char *wall)
-{
-	int	i;
-
-	i = 0;
-	if (!wall)
-		return (0);
-	while (wall[i] && wall[i] == ' ')
-		i++;
-	if (!wall[i] || wall[i] == '\n')
-		return (0);
-	while (wall[i] && wall[i] != '\n')
-	{
-		if (wall[i] != '1' && wall[i] != ' ' && wall[i] != '.')
-			return (0);
-		i++;
-	}
 	return (1);
 }
 

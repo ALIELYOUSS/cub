@@ -6,13 +6,13 @@
 /*   By: alel-you <alel-you@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 20:19:55 by alel-you          #+#    #+#             */
-/*   Updated: 2025/10/20 04:13:37 by alel-you         ###   ########.fr       */
+/*   Updated: 2025/10/20 22:39:34 by alel-you         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../header/cub.h"
 
-int td_len(char **td)
+int	td_len(char **td)
 {
 	int i = 0;
 	while (td && td[i])
@@ -111,27 +111,39 @@ int closed_map(char **map)
     while (map[y])
     {
         len = strlen(map[y]);
-        if (len > 0 && map[y][len-1] == '\n')
+        if (len > 0 && map[y][len - 1] == '\n')
             len--;
         x = 0;
         while (x < len)
         {
             if (map[y][x] == '0' || is_player(map[y][x]))
             {
-                if (x == 0 || map[y][x-1] == ' ')
-                    return (printf("Error: walkable area exposed to void at y=%d, x=%d (left)\n", y, x), 0);
+                if (x == 0 || map[y][x - 1] == ' ')
+                    return (printf("walkable area exposed to void at y=%d, x=%d (left)\n", y, x), 0);
                 if (x == len - 1 || map[y][x + 1] == ' ')
-                    return (printf("Error: walkable area exposed to void at y=%d, x=%d (right)\n", y, x), 0);
+                    return (printf("walkable area exposed to void at y=%d, x=%d (right)\n", y, x), 0);
                 if (y == 0 || x >= strlen(map[y - 1]) || map[y - 1][x] == ' ' || map[y - 1][x] == '\n')
-                    return (printf("Error: walkable area exposed to void at y=%d, x=%d (up)\n", y, x), 0);
+                    return (printf("walkable area exposed to void at y=%d, x=%d (up)\n", y, x), 0);
                 if (y == td_len(map) - 1 || x >= strlen(map[y + 1]) || map[y + 1][x] == ' ' || map[y + 1][x] == '\n')
-                    return (printf("Error: walkable area exposed to void at y=%d, x=%d (down)\n", y, x), 0);
+                    return (printf("walkable area exposed to void at y=%d, x=%d (down)\n", y, x), 0);
             }
             x++;
         }
         y++;
     }
     return (1);
+}
+
+void	player_spwn_or(char s, t_cub **cub)
+{
+	if (s == 'N')
+		(*cub)->plyer_pos.spg_or = N;
+	else if (s == 'S')
+		(*cub)->plyer_pos.spg_or = S;
+	else if (s == 'W')
+		(*cub)->plyer_pos.spg_or = W;
+	else if (s == 'E')
+		(*cub)->plyer_pos.spg_or = E;
 }
 
 void	player_position(char **map, t_cub **cub)
@@ -147,7 +159,8 @@ void	player_position(char **map, t_cub **cub)
 		{
 			if (map[y][x] == 'N' || map[y][x] == 'E'|| map[y][x] == 'S'|| map[y][x] == 'W')
 			{
-				(*cub)->plyer_pos.x = x;		
+				player_spwn_or(map[y][x], cub);
+				(*cub)->plyer_pos.x = x;	
 				(*cub)->plyer_pos.y = y;
 			}
 			x++;
@@ -157,20 +170,15 @@ void	player_position(char **map, t_cub **cub)
 	(*cub)->map_h = y;
 }
 
-int	cub_items(char *line, t_cub *cb_st)
+int	cub_items(char *line)
 {
 	int		i;
 	char	*map_line;
-	char	sp_or;
 
-	sp_or = 0;
 	i = 0;
 	map_line = ft_strtrim(line, " ");
 	while (map_line && map_line[i])
 	{
-		sp_or = map_line[i];
-		if (sp_or == 'S' || sp_or == 'N' || sp_or == 'W' || sp_or == 'E')
-			cb_st->plyer_pos.spg_or = sp_or;
 		if (map_line[i] != 'N' &&  map_line[i] != 'S' &&  map_line[i] != 'W' && map_line[i] != '\n'
 			&&  map_line[i] != 'E' && map_line[i] != '0' && map_line[i] !=  '1' && map_line[i] != ' ')
 			return (printf("Error\nmap contains none cub items\n"), 0);
@@ -183,9 +191,9 @@ int	cub_items(char *line, t_cub *cb_st)
 
 int	one_player_on_map(char **map)
 {
-	int	count;
-	int	x;
-	int	y;
+	int		count;
+	int		x;
+	int		y;
 
 	count = 0;
 	y = 0;
@@ -201,7 +209,7 @@ int	one_player_on_map(char **map)
 		}
 		y++;
 	}
-	if (count != 1)
-		return (ft_putstr_fd("one player should be on map\n", 2), 0);
+	if (count > 1 || count < 1)
+		return (ft_putstr_fd("one player should be on map!!\n", 2), 0);
 	return (1);
 }

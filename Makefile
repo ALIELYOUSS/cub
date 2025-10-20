@@ -1,4 +1,4 @@
-FILES = src/main.c src/utils/parce_utils.c src/utils/map_utils.c src/utils/map_utils1.c src/utils/utils.c src/utils/utils1.c  get_next_line/get_next_line.c get_next_line/get_next_line_utils.c
+FILES = src/main.c src/tools.c src/utils/parce_utils.c src/utils/map_utils.c src/utils/map_utils1.c src/utils/utils.c src/utils/utils1.c  get_next_line/get_next_line.c get_next_line/get_next_line_utils.c
 
 OBJ = $(FILES:.c=.o)
 
