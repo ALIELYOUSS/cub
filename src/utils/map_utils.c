@@ -79,10 +79,10 @@ int	get_map(t_cred_list *list, t_cub **cub)
 	int			map_sz;
 
 	index = 0;
-	map = malloc(sizeof(char *) * (map_size(list)) + 1);
+	map = malloc(sizeof(char *) * (map_size(list) + 1));
 	if(!map)
 		return (0);
-	map[map_size(list) + 1] = NULL;
+	map[map_size(list)] = NULL;
 	tmp = list;
 	while (tmp && !is_map_line(tmp->content))
 		tmp = tmp->next;
